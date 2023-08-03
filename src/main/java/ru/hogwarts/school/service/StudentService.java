@@ -1,44 +1,49 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.StudentRepository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
 
-    Map<Long, Student> students = new HashMap<>();
-    private long lastId = 0;
+    private StudentRepository studentRepository;
+
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     public Student createStudent(Student student){
-        student.setId(++lastId);
-        students.put(lastId, student);
-        return student;
+        return studentRepository.save(student);
     }
 
     public Student findStudent(long id){
-        return students.get(id);
+        return studentRepository.findById(id).get();
     }
 
     public Student editStudent(Student student){
-        if(students.containsKey(student.getId())) {
-            students.put(student.getId(), student);
-            return student;
-        }
-        return null;
+        return studentRepository.save(student);
     }
 
-    public Student deleteStudent(long id){
-        return students.remove(id);
+    public void deleteStudent(long id){
+        studentRepository.deleteById(id);
     }
 
-    public List<Student> ageFilter(Integer age){
-        return students.values().stream()
-                .filter(e -> e.getAge() == age)
-                .collect(Collectors.toList());
+    public Collection<Student> ageFilter(int age){
+        return studentRepository.findByAge(age);
     }
+
+    public Collection<Student> findStudentByAgeBetween(int min, int max){
+        return studentRepository.findStudentByAgeBetween(min, max);
+    }
+
+    public Faculty getStudentFaculty(Long id){
+        return studentRepository.getById(id).getFaculty();
+    }
+
 }
