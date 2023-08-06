@@ -1,6 +1,5 @@
 package ru.hogwarts.school.controller;
 
-import org.apache.coyote.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -43,6 +42,7 @@ public class StudentController {
 
     @PostMapping
     public Student createStudent(@RequestBody Student student){
+
         return studentService.createStudent(student);
     }
 
@@ -60,7 +60,7 @@ public class StudentController {
         studentService.deleteStudent(id);
         return ResponseEntity.ok().build();
     }
-    @GetMapping("{age}")
+    @GetMapping("/get-by-age/{age}")
     public ResponseEntity ageFilter(@PathVariable Integer age){
 
         return ResponseEntity.ok(studentService.ageFilter(age));
@@ -107,7 +107,7 @@ public class StudentController {
         try (InputStream is = Files.newInputStream(path);
              OutputStream os = response.getOutputStream();) {
             response.setContentType(avatar.getMediaType());
-            response.setContentLength((int) avatar.getFileSize());
+            response.setContentLength(Integer.parseInt(String.valueOf(avatar.getFileSize())));
             is.transferTo(os);
         }
     }
