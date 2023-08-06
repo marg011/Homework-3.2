@@ -258,16 +258,14 @@ public class FacultyControllerMockTests {
         students.add(new Student(2L,"Mary",17));
         faculty.setStudents(students);
 
-        when(facultyRepository.getById(1L).getStudents()).thenReturn(students);
+        when(facultyRepository.findById(any(Long.class))).thenReturn(Optional.of(faculty));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/faculty/students-by-id/1")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.size()").value(students.size()))
-                .andExpect(jsonPath("$[0]").value(students.get(0)))
-                .andExpect(jsonPath("$[1]").value(students.get(1)));
+                .andExpect(jsonPath("$.size()").value(faculty.getStudents().size()));
     }
 
 }

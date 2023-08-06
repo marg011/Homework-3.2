@@ -43,7 +43,7 @@ public class FacultyService {
     }
 
     public Collection<Student> getFacultyStudents(Long id){
-        return facultyRepository.getById(id).getStudents();
+        return facultyRepository.findById(id).map(Faculty::getStudents).orElse(null);
     }
 
     public Faculty findFacultyByName(String name){

@@ -243,7 +243,7 @@ public class StudentControllerMockTests {
     public void testGetFacultyByStudent() throws Exception {
         final String name = "alice";
         final int age = 25;
-        final long id = 1L;
+        final long id = 20L;
 
         Student student = new Student();
         student.setId(id);
@@ -254,11 +254,11 @@ public class StudentControllerMockTests {
         when(studentRepository.findById(any(long.class))).thenReturn(Optional.of(student));
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/student/faculty-by-id/1")
+                        .get("/student/faculty-by-id/20")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.name").value("Gryffindor"))
-                .andExpect(jsonPath("$.age").value("green"));
+                .andExpect(jsonPath("$.color").value("green"));
     }
 }

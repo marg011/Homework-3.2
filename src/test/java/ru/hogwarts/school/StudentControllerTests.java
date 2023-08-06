@@ -53,25 +53,6 @@ public class StudentControllerTests {
     }
 
     @Test
-    public void testPutStudent() throws Exception {
-        testPostStudent();
-        Student student = new Student();
-        student.setAge(15);
-        student.setName("Harry");
-        ResponseEntity<Student> exchange = restTemplate.exchange(
-                "http://localhost:" + port + "/student",
-                HttpMethod.PUT,
-                new HttpEntity<>(student),
-                Student.class);
-        Assertions
-                .assertThat(exchange.getBody())
-                .isNotNull();
-        Assertions
-                .assertThat(exchange.getBody().getName())
-                .isEqualTo(student.getName());
-    }
-
-    @Test
     public void testDeleteStudent() throws Exception {
         Long id = studentRepository.findStudentByName("Harry").getId();
         Student student = new Student();
@@ -89,11 +70,27 @@ public class StudentControllerTests {
     }
 
     @Test
-    public void testGetStudentByAge() throws Exception {
-        testPostStudent();
-        int age = studentRepository.findStudentByName("Harry").getAge();
+    public void testPutStudent() throws Exception {
+        Student student = new Student();
+        student.setAge(15);
+        student.setName("Harry");
+        ResponseEntity<Student> exchange = restTemplate.exchange(
+                "http://localhost:" + port + "/student",
+                HttpMethod.PUT,
+                new HttpEntity<>(student),
+                Student.class);
         Assertions
-                .assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/student/get-by-age" + age, String.class))
+                .assertThat(exchange.getBody())
+                .isNotNull();
+        Assertions
+                .assertThat(exchange.getBody().getName())
+                .isEqualTo(student.getName());
+    }
+
+    @Test
+    public void testGetStudentByAge() throws Exception {
+        Assertions
+                .assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/student/get-by-age/15", String.class))
                 .isNotNull();
     }
 
