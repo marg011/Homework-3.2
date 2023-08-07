@@ -106,7 +106,7 @@ public class FacultyControllerTests {
     @Test
     public void testGetStudentsByFaculty(){
         Assertions
-                .assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/faculty/students-by-id/32", String.class))
+                .assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/faculty/students-by-id/66", String.class))
                 .isNotNull();
     }
 

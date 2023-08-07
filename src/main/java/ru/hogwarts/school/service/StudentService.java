@@ -6,8 +6,6 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -48,5 +46,17 @@ public class StudentService {
 
     public Student findStudentByName(String name){
         return studentRepository.findStudentByName(name);
+    }
+
+    public int getNumberOfStudents() {
+        return studentRepository.getNumberOfStudents();
+    }
+
+    public int getAverageAgeOfStudents() {
+        return studentRepository.getAverageAgeOfStudents();
+    }
+
+    public List<String> getFiveLastStudents() {
+        return studentRepository.getFiveLastStudents();
     }
 }
