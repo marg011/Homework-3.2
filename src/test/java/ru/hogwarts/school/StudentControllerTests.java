@@ -54,7 +54,7 @@ public class StudentControllerTests {
 
     @Test
     public void testDeleteStudent() throws Exception {
-        Long id = studentRepository.findStudentByName("Harry").getId();
+        Long id = studentRepository.findStudentsByName("Harry").get(0).getId();
         Student student = new Student();
         student.setAge(15);
         student.setName("Harry");
@@ -96,7 +96,7 @@ public class StudentControllerTests {
 
     @Test
     public void testGetStudentsByAgeBetween(){
-        int age = studentRepository.findStudentByName("Harry").getAge();
+        int age = studentRepository.findStudentsByName("Harry").get(0).getAge();
         Assertions
                 .assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/student/find-students-by-age-between?min=10&max=16", String.class))
                 .isNotNull();

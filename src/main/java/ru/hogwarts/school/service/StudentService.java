@@ -44,8 +44,8 @@ public class StudentService {
         return studentRepository.findById(id).get().getFaculty();
     }
 
-    public Student findStudentByName(String name){
-        return studentRepository.findStudentByName(name);
+    public List<Student> findStudentsByName(String name){
+        return studentRepository.findStudentsByName(name);
     }
 
     public int getNumberOfStudents() {
