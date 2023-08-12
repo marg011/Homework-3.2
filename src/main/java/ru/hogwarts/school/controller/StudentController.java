@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
+import java.util.List;
 
 
 @RestController
@@ -65,5 +66,20 @@ public class StudentController {
     @GetMapping("/students-by-name/{name}")
     public ResponseEntity findStudentsByName(@PathVariable String name){
         return ResponseEntity.ok(studentService.findStudentsByName(name));
+    }
+
+    @GetMapping("/average-age-of-students")
+    public int getAverageAgeOfStudents(){
+        return studentService.getAverageAgeOfStudents();
+    }
+
+    @GetMapping("/five-last-students")
+    public List<String> getFiveLastStudents(){
+        return studentService.getFiveLastStudents();
+    }
+
+    @GetMapping("/number-of-students")
+    public int getNumberOfStudents(){
+        return studentService.getNumberOfStudents();
     }
 }
