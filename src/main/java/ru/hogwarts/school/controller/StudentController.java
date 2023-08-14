@@ -6,6 +6,7 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -85,13 +86,24 @@ public class StudentController {
 
     @GetMapping("/students-A")
     public List<String> getStudentsNamesStartingWithA(){
-        return studentService.getStudentsNamesStartingWithA();
+        return studentService.getStudents()
+                .stream()
+                .parallel()
+                .map(student -> student.getName())
+                .filter(name -> name.startsWith("A"))
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/average-age2")
     public double getAverageAge2(){
-        return studentService.getAverageAge2();
+        return studentService.getStudents()
+                .stream()
+                .parallel()
+                .mapToDouble(student -> student.getAge())
+                .average()
+                .orElse(Double.NaN);
     }
 
-    }
+}
 

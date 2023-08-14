@@ -78,24 +78,7 @@ public class StudentService {
         return studentRepository.getFiveLastStudents();
     }
 
-    public List<String> getStudentsNamesStartingWithA(){
-        logger.debug("getStudentsNamesStartingWithA method is called");
-        return studentRepository.findAll().stream()
-                .parallel()
-                .map(student -> student.getName())
-                .filter(name -> name.startsWith("A"))
-                .sorted()
-                .collect(Collectors.toList());
+    public List<Student> getStudents(){
+        return studentRepository.findAll();
     }
-
-    public double getAverageAge2(){
-        logger.debug("getAverageAge2 method is called");
-        return studentRepository.findAll().stream()
-                .parallel()
-                .mapToDouble(student -> student.getAge())
-                .average()
-                .orElse(Double.NaN);
-    }
-
-
 }
