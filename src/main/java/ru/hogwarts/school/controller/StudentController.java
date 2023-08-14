@@ -82,4 +82,16 @@ public class StudentController {
     public int getNumberOfStudents(){
         return studentService.getNumberOfStudents();
     }
-}
+
+    @GetMapping("/students-A")
+    public List<String> getStudentsNamesStartingWithA(){
+        return studentService.getStudentsNamesStartingWithA();
+    }
+
+    @GetMapping("/average-age2")
+    public double getAverageAge2(){
+        return studentService.getAverageAge2();
+    }
+
+    }
+

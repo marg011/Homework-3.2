@@ -15,4 +15,8 @@ public interface FacultyRepository extends JpaRepository<Faculty, Long> {
                                                                        String name);
 
     Faculty findFacultyByName(String name);
+
+    String getLongestFacultyName();
+
+    int getInteger();
 }
