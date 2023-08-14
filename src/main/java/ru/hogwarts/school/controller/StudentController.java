@@ -6,6 +6,8 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("student")
@@ -28,6 +30,7 @@ public class StudentController {
 
     @PostMapping
     public Student createStudent(@RequestBody Student student){
+
         return studentService.createStudent(student);
     }
 
@@ -41,11 +44,66 @@ public class StudentController {
     }
 
     @DeleteMapping("{id}")
-    public Student deleteStudent(@PathVariable Long id){
-        return studentService.deleteStudent(id);
+    public ResponseEntity deleteStudent(@PathVariable Long id){
+        studentService.deleteStudent(id);
+        return ResponseEntity.ok().build();
     }
-    @GetMapping("{age}")
-    public List<Student> ageFilter(@PathVariable Integer age){
-        return studentService.ageFilter(age);
+    @GetMapping("/get-by-age/{age}")
+    public ResponseEntity ageFilter(@PathVariable Integer age){
+
+        return ResponseEntity.ok(studentService.ageFilter(age));
     }
+
+    @GetMapping("/find-students-by-age-between")
+    public ResponseEntity findStudentByAgeBetween(@RequestParam int min, @RequestParam int max){
+        return ResponseEntity.ok(studentService.findStudentByAgeBetween(min, max));
+    }
+
+    @GetMapping("/faculty-by-id/{id}")
+    public ResponseEntity findFacultyByStudent(@PathVariable Long id){
+        return ResponseEntity.ok(studentService.getStudentFaculty(id));
+    }
+
+    @GetMapping("/students-by-name/{name}")
+    public ResponseEntity findStudentsByName(@PathVariable String name){
+        return ResponseEntity.ok(studentService.findStudentsByName(name));
+    }
+
+    @GetMapping("/average-age-of-students")
+    public int getAverageAgeOfStudents(){
+        return studentService.getAverageAgeOfStudents();
+    }
+
+    @GetMapping("/five-last-students")
+    public List<String> getFiveLastStudents(){
+        return studentService.getFiveLastStudents();
+    }
+
+    @GetMapping("/number-of-students")
+    public int getNumberOfStudents(){
+        return studentService.getNumberOfStudents();
+    }
+
+    @GetMapping("/students-A")
+    public List<String> getStudentsNamesStartingWithA(){
+        return studentService.getStudents()
+                .stream()
+                .parallel()
+                .map(student -> student.getName())
+                .filter(name -> name.startsWith("A"))
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/average-age2")
+    public double getAverageAge2(){
+        return studentService.getStudents()
+                .stream()
+                .parallel()
+                .mapToDouble(student -> student.getAge())
+                .average()
+                .orElse(Double.NaN);
+    }
+
 }
+

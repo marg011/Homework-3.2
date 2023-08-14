@@ -1,45 +1,78 @@
 package ru.hogwarts.school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.FacultyRepository;
 
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 
 @Service
 public class FacultyService {
 
-    Map<Long, Faculty> faculties = new HashMap<>();
-    private long lastId = 0;
+    Logger logger = LoggerFactory.getLogger(FacultyService.class);
+   private FacultyRepository facultyRepository;
+
+    public FacultyService(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
 
     public Faculty createFaculty(Faculty faculty){
-        faculty.setId(++lastId);
-        faculties.put(lastId, faculty);
-        return faculty;
+        logger.debug("createFaculty method is called");
+        return facultyRepository.save(faculty);
     }
 
     public Faculty findFaculty(long id){
-        return faculties.get(id);
+        logger.debug("findFaculty method is called");
+        return facultyRepository.findById(id).get();
     }
 
     public Faculty editFaculty(Faculty faculty){
-        if (faculties.containsKey(faculty.getId())) {
-            faculties.put(faculty.getId(), faculty);
-            return faculty;
-        }
-        return null;
+        logger.debug("editFaculty method is called");
+        return facultyRepository.save(faculty);
     }
 
-    public Faculty deleteFaculty(long id){
-        return faculties.remove(id);
+    public void deleteFaculty(long id){
+        logger.debug("deleteFaculty method is called");
+        facultyRepository.deleteById(id);
     }
 
-    public List<Faculty> colorFilter(String color){
-        return faculties.values().stream()
-                .filter(e -> e.getColor().contains(color))
-                .collect(Collectors.toList());
+    public Collection<Faculty> colorFilter(String color){
+        logger.debug("colorFilter method is called");
+        return facultyRepository.findByColor(color);
+    }
+
+    public Collection<Faculty> findFacultiesByColorIgnoreCaseOrNameIgnoreCase(String color, String name){
+        logger.debug("findFacultiesByColorIgnoreCaseOrNameIgnoreCase method is called");
+        return facultyRepository.findFacultiesByColorIgnoreCaseOrNameIgnoreCase(color, name);
+    }
+
+    public Collection<Student> getFacultyStudents(Long id){
+        logger.debug("getFacultyStudents method is called");
+        return facultyRepository.findById(id).map(Faculty::getStudents).orElse(null);
+    }
+
+    public Faculty findFacultyByName(String name){
+        logger.debug("findFacultyByName method is called");
+        return facultyRepository.findFacultyByName(name);
+    }
+
+    public String getLongestFacultyName(){
+        logger.debug("getLongestFacultyName method is called");
+        return facultyRepository.findAll().stream()
+                .map(faculty -> faculty.getName())
+                .max(Comparator.comparingInt(String::length))
+                .get();
+
+    }
+
+    public int getInteger(){
+        return Stream.iterate(1, a -> a +1) .limit(1_000_000) .reduce(0, (a, b) -> a + b );
     }
 }
