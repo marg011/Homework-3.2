@@ -86,23 +86,23 @@ public class StudentController {
 
     @GetMapping("/students-A")
     public List<String> getStudentsNamesStartingWithA(){
-        return studentService.getStudents()
-                .stream()
-                .parallel()
-                .map(student -> student.getName())
-                .filter(name -> name.startsWith("A"))
-                .sorted()
-                .collect(Collectors.toList());
+        return studentService.getStudentsNamesStartingWithA();
     }
 
     @GetMapping("/average-age2")
     public double getAverageAge2(){
-        return studentService.getStudents()
-                .stream()
-                .parallel()
-                .mapToDouble(student -> student.getAge())
-                .average()
-                .orElse(Double.NaN);
+        return studentService.getAverageAge2();
+    }
+
+    @GetMapping("/all-students")
+    public List<Student> getAllStudents(){
+        return studentService.getAllStudents();
+    }
+
+
+    @GetMapping("/all-students-synchronized")
+    public List<Student> getAllStudentsSync(){
+        return studentService.getAllStudentsSync();
     }
 
 }

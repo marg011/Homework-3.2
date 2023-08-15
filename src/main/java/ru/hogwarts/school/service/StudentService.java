@@ -78,7 +78,61 @@ public class StudentService {
         return studentRepository.getFiveLastStudents();
     }
 
-    public List<Student> getStudents(){
-        return studentRepository.findAll();
+    public List<String> getStudentsNamesStartingWithA(){
+        return studentRepository.findAll()
+                .stream()
+                .parallel()
+                .map(student -> student.getName())
+                .filter(name -> name.startsWith("A"))
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    public double getAverageAge2(){
+        return studentRepository.findAll()
+                .stream()
+                .parallel()
+                .mapToDouble(student -> student.getAge())
+                .average()
+                .orElse(Double.NaN);
+    }
+
+    public List<Student> getAllStudents(){
+        List<Student> students = studentRepository.findAll();
+        System.out.println(students.get(0));
+        System.out.println(students.get(1));
+
+        new Thread(() -> {
+            System.out.println(students.get(2));
+            System.out.println(students.get(3));
+        }).start();
+
+        new Thread(() -> {
+            System.out.println(students.get(4));
+            System.out.println(students.get(5));
+        }).start();
+
+        return students;
+    }
+
+    public List<Student> getAllStudentsSync(){
+        List<Student> students = studentRepository.findAll();
+        printStudents(students, 0);
+        printStudents(students, 1);
+
+        new Thread(() -> {
+            printStudents(students, 2);
+            printStudents(students, 3);
+        }).start();
+
+        new Thread(() -> {
+            printStudents(students, 4);
+            printStudents(students, 5);
+        }).start();
+
+        return students;
+    }
+    private synchronized void printStudents(List<Student> students, int index) {
+        System.out.println(students.get(index));
     }
 }
