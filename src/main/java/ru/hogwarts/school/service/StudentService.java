@@ -117,22 +117,34 @@ public class StudentService {
 
     public List<Student> getAllStudentsSync(){
         List<Student> students = studentRepository.findAll();
-        printStudents(students, 0);
-        printStudents(students, 1);
+        printStudents(students);
+        printStudents(students);
 
         new Thread(() -> {
-            printStudents(students, 2);
-            printStudents(students, 3);
+            printStudents(students);
+            try{
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException();
+            }
+            printStudents(students);
         }).start();
 
         new Thread(() -> {
-            printStudents(students, 4);
-            printStudents(students, 5);
+            printStudents(students);
+            try{
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException();
+            }
+            printStudents(students);
         }).start();
 
         return students;
     }
-    private synchronized void printStudents(List<Student> students, int index) {
-        System.out.println(students.get(index));
+
+    int index;
+    private synchronized void printStudents(List<Student> students) {
+        System.out.println(students.get(index++));
     }
 }
